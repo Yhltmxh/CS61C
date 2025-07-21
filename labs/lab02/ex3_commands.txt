@@ -3,3 +3,50 @@
 # Lines starting with # are comments, feel free to add any to document your commands
 
 # Please add your commands below this line
+(gdb) b check_number
+Breakpoint 1 at 0x14000189c: file pwd_checker.c, line 60.
+(gdb) run
+Starting program: E:\cs\cs61c\labs\lab02\pwd_checker.exe 
+[New Thread 8296.0x95c]
+Running tests...
+
+
+Thread 1 hit Breakpoint 1, check_number (password=0x7ff78a8b4021 "qrtv?,mp!ltrA0b13rab4ham") at pwd_checker.c:60     
+60          while (*password != '\0') {
+(gdb) next
+61              if (check_range(*password, 0, 9)) {
+(gdb) step
+check_range (letter=113 'q', lower=0 '\000', upper=9 '\t') at pwd_checker.c:30
+30          bool is_in_range = (letter > lower && letter < upper);
+(gdb) bt
+#0  check_range (letter=113 'q', lower=0 '\000', upper=9 '\t') at pwd_checker.c:30
+#1  0x00007ff78a8b18ba in check_number (password=0x7ff78a8b4021 "qrtv?,mp!ltrA0b13rab4ham") at pwd_checker.c:61      
+#2  0x00007ff78a8b1997 in check_password (first_name=0x7ff78a8b4012 "Abraham", last_name=0x7ff78a8b401a "Garcia", 
+    password=0x7ff78a8b4021 "qrtv?,mp!ltrA0b13rab4ham") at pwd_checker.c:86
+#3  0x00007ff78a8b14ac in main () at test_pwd_checker.c:11
+(gdb) b if letter == '0'
+Breakpoint 2 at 0x7ff78a8b17b7: file pwd_checker.c, line 30.
+(gdb) run
+The program being debugged has been started already.
+Start it from the beginning? (y or n) n
+Program not restarted.
+(gdb) continue
+Continuing.
+[New Thread 8296.0x709c]
+
+Thread 1 hit Breakpoint 2, check_range (letter=48 '0', lower=0 '\000', upper=9 '\t') at pwd_checker.c:30
+30          bool is_in_range = (letter > lower && letter < upper);
+(gdb) print letter
+$1 = 48 '0'
+(gdb) print is_in_range 
+$2 = false
+(gdb) print lower
+$3 = 0 '\000'
+(gdb) print upper
+$4 = 9 '\t'
+(gdb) exit
+A debugging session is active.
+
+        Inferior 1 [process 8296] will be killed.
+
+Quit anyway? (y or n) y

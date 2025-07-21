@@ -3,3 +3,57 @@
 # Lines starting with # are comments, feel free to add any to document your commands
 
 # Please add your commands below this line
+(gdb) start
+Temporary breakpoint 1 at 0x140001465: file test_pwd_checker.c, line 6.
+Starting program: E:\cs\cs61c\labs\lab02\pwd_checker.exe
+[New Thread 24348.0x5a5c]
+
+Thread 1 hit Temporary breakpoint 1, main () at test_pwd_checker.c:6
+6           printf("Running tests...\n\n");
+(gdb) step over
+No symbol "over" in current context.
+(gdb) next
+Running tests...
+
+8           const char *test1_first = "Abraham";
+(gdb) next
+9           const char *test1_last = "Garcia";
+(gdb) next
+10          const char *test1_pwd = "qrtv?,mp!ltrA0b13rab4ham";
+(gdb) next
+11          bool test1 = check_password(test1_first, test1_last, test1_pwd);
+(gdb) step
+check_password (first_name=0x7ff691224012 "Abraham", last_name=0x7ff69122401a "Garcia", 
+    password=0x7ff691224021 "qrtv?,mp!ltrA0b13rab4ham") at pwd_checker.c:83
+83          lower = check_lower(password);
+(gdb) step
+check_lower (password=0x7ff691224021 "qrtv?,mp!ltrA0b13rab4ham") at pwd_checker.c:48
+48          while (*password != '\0') {
+(gdb) print password
+$1 = 0x7ff691224021 "qrtv?,mp!ltrA0b13rab4ham"
+(gdb) fin
+Run till exit from #0  check_lower (password=0x7ff691224021 "qrtv?,mp!ltrA0b13rab4ham") at pwd_checker.c:48
+0x00007ff69122195f in check_password (first_name=0x7ff691224012 "Abraham", last_name=0x7ff69122401a "Garcia",        
+    password=0x7ff691224021 "qrtv?,mp!ltrA0b13rab4ham") at pwd_checker.c:83
+83          lower = check_lower(password);
+Value returned is $2 = true
+(gdb) next
+84          length = check_length(password);
+(gdb) step
+[New Thread 24348.0x20f0]
+check_length (password=0x7ff691224021 "qrtv?,mp!ltrA0b13rab4ham") at pwd_checker.c:23
+23          int length = strlen(password);
+(gdb) next
+24          bool meets_len_req = (length <= 10);
+(gdb)
+25          return meets_len_req;
+(gdb) print meets_len_req 
+$3 = false
+(gdb) print length 
+$4 = 24
+(gdb) quit
+A debugging session is active.
+
+        Inferior 1 [process 24348] will be killed.
+
+Quit anyway? (y or n) y
