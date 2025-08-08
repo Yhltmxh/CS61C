@@ -9,10 +9,10 @@
 #   None
 # =================================================================
 abs:
-    # Prologue
-
-    # PASTE HERE
-
-    # Epilogue
-
+    # Load number from memory
+    lw t0, 0(a0)
+    bge t0, zero, done
+    sub t0, x0, t0
+    sw t0, 0(a0)
+done:
     jr ra
