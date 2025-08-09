@@ -29,14 +29,15 @@ classify:
     bne a0, t0, classify_error2
 
     # Prologue
-    addi sp, sp, -28
+    addi sp, sp, -32
     sw ra, 0(sp)
     sw s1, 4(sp)
     sw s2, 8(sp)
     sw s3, 12(sp)
     sw s4, 16(sp)
     sw s5, 20(sp)
-    sw a2, 24(sp)
+    sw s6, 24(sp)
+    sw a2, 28(sp)
     mv s1, a1
 
     # Read pretrained m0
@@ -89,6 +90,15 @@ classify:
     mul a1, t1, t2
     jal ra, relu
 
+    # s6 = malloc(m0.height * input.width * 4)
+    lw t1, 8(sp)
+    lw t2, 4(sp)
+    mul t0, t1, t2
+    slli a0, t0, 2
+    jal ra, malloc
+    beq a0, x0, classify_error1
+    mv s6, a0
+
     # Compute o = matmul(m1, h)
     mv a0, s3
     lw a1, 8(sp)
@@ -96,18 +106,18 @@ classify:
     mv a3, s5
     lw a4, 16(sp)
     lw a5, 4(sp)
-    mv a6, s4
+    mv a6, s6
     jal ra, matmul
 
     # Write output matrix o
     lw a0, 16(s1)
-    mv a1, s4
+    mv a1, s6
     lw a2, 8(sp)
     lw a3, 4(sp)
     jal ra, write_matrix
 
     # Compute and return argmax(o)
-    mv a0, s4
+    mv a0, s6
     lw t1, 8(sp)
     lw t2, 4(sp)
     mul a1, t1, t2
@@ -115,7 +125,7 @@ classify:
     mv s1, a0
     addi sp, sp, 24
     # If enabled, print argmax(o) and newline
-    lw a2, 24(sp)
+    lw a2, 28(sp)
     bne a2, x0, end
     jal ra, print_int
     li a0, '\n'
@@ -131,6 +141,8 @@ end:
     jal ra, free
     mv a0, s5
     jal ra, free
+    mv a0, s6
+    jal ra, free
 
     mv a0, s1
 
@@ -141,7 +153,8 @@ end:
     lw s3, 12(sp)
     lw s4, 16(sp)
     lw s5, 20(sp)
-    addi sp, sp, 28
+    lw s6, 24(sp)
+    addi sp, sp, 32
     jr ra
 
 classify_error1:
