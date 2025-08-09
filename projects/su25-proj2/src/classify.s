@@ -24,7 +24,6 @@
 # Usage:
 #   main.s <M0_PATH> <M1_PATH> <INPUT_PATH> <OUTPUT_PATH>
 classify:
-    ebreak
     addi t0, x0, 5
     bne a0, t0, classify_error2
 
